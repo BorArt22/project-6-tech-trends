@@ -8,4 +8,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 3111
 
+RUN python init_db.py
+
 CMD [ "python", "app.py" ]
