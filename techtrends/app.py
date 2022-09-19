@@ -64,18 +64,19 @@ def healthcheck():
 # Metrics endpoint
 @app.route('/metrics')
 def metrics():
-
     connection = get_db_connection()
-    posts_count = connection.execute('SELECT count(1) as posts_count FROM posts').fetchall()[0]
+    post_count = connection.execute('SELECT count(1) from posts').fetchone()[0]
     connection.close()
-
     response = app.response_class(
-            response=json.dumps({"status":"success","code":0,"data":{"db_connection_count":connection_count,"post_count":posts_count}}),
-            status=200,
-            mimetype='application/json'
+        response=json.dumps({
+            'post_count': post_count,
+            'db_connection_count': connection_count
+        }),
+        status=200,
+        mimetype='application/json'
     )
 
-    log_message('[Metrics] request')
+    log_message('[metrics] request')
     return response
 
 
