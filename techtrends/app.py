@@ -66,11 +66,11 @@ def healthcheck():
 def metrics():
 
     connection = get_db_connection()
-    posts_count = connection.execute('SELECT count(1) as posts_count FROM posts').fetchall()
+    posts_count = connection.execute('SELECT count(1) as posts_count FROM posts').fetchall()[0]
     connection.close()
 
     response = app.response_class(
-            response=json.dumps({"status":"success","code":0,"data":{"db_connection_count":connection_count,"post_count":posts_count['posts_count']}}),
+            response=json.dumps({"status":"success","code":0,"data":{"db_connection_count":connection_count,"post_count":posts_count}}),
             status=200,
             mimetype='application/json'
     )
