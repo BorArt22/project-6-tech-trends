@@ -33,3 +33,5 @@ And lastly, the first prototype of the application is storing and accessing post
   alt="Table with the SQL schema for the posts table">
   <figcaption>The schema for the "posts" table</figcaption>
 </figure>
+
+# Test
