@@ -36,8 +36,8 @@ def log_message(message):
         time=datetime.now().strftime("%d/%m/%Y, %H:%M:%S"), message=message))
 
 # Healthcheck endpoint
-@app.route('/status')
-def healthcheck():
+@app.route('/healthz')
+def healthz():
     try:
         connection = get_db_connection()
         connection.execute('SELECT * FROM posts').fetchall()
@@ -48,7 +48,7 @@ def healthcheck():
                 mimetype='application/json'
         )
 
-        log_message('Status request successfull')
+        log_message('healthz request successfull')
         return response
 
     except Exception:
@@ -58,7 +58,7 @@ def healthcheck():
             mimetype='application/json'
         )
         
-        log_message('Status request unsuccessfull - ERROR')
+        log_message('healthz request unsuccessfull - ERROR')
         return response
 
 # Metrics endpoint
