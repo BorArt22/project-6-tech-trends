@@ -8,6 +8,7 @@ service:
   type: ClusterIP
 
 image:
+  maintainers: borart22
   repository: techtrends
   tag: latest
   pullPolicy: IfNotPresent
