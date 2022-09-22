@@ -13,5 +13,5 @@ spec:
       valueFiles:
       - values-staging.yaml
     path: helm
-    repoURL: https://github.com/BorArt22/project-6-tech-trends
+    repoURL: git@github.com:BorArt22/project-6-tech-trends.git
     targetRevision: HEAD
