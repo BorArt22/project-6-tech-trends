@@ -5,6 +5,10 @@ from werkzeug.exceptions import abort
 
 from datetime import datetime
 import logging
+import sys
+
+stdout_fileno = sys.stdout
+stderr_fileno = sys.stderr
 
 # Count all database connections
 connection_count = 0
@@ -48,6 +52,7 @@ def healthz():
                 mimetype='application/json'
         )
 
+        stdout_fileno.write('healthz request successfull\n')
         log_message('healthz request successfull')
         return response
 
@@ -57,7 +62,7 @@ def healthz():
             status=500,
             mimetype='application/json'
         )
-        
+        stderr_fileno.write('healthz request unsuccessfull - ERROR\n')
         log_message('healthz request unsuccessfull - ERROR')
         return response
 
@@ -76,6 +81,7 @@ def metrics():
         mimetype='application/json'
     )
 
+    stdout_fileno.write('[metrics] request\n')
     log_message('[metrics] request')
     return response
 
@@ -86,6 +92,7 @@ def index():
     connection = get_db_connection()
     posts = connection.execute('SELECT * FROM posts').fetchall()
     connection.close()
+    stdout_fileno.write('The main route of the web application request\n')
     log_message('The main route of the web application request')
     return render_template('index.html', posts=posts)
 
@@ -95,15 +102,18 @@ def index():
 def post(post_id):
     post = get_post(post_id)
     if post is None:
+        stderr_fileno.write('Article "{post_id}" can not be find\n'.format(post_id = post_id))
         log_message('Article "{post_id}" can not be find'.format(post_id = post_id))
         return render_template('404.html'), 404
     else:
+        stdout_fileno.write('Article "{post_id}" retrieved\n'.format(post_id = post_id))
         log_message('Article "{post_id}" retrieved'.format(post_id = post_id))
         return render_template('post.html', post=post)
 
 # Define the About Us page
 @app.route('/about')
 def about():
+    stdout_fileno.write('[about] request\n')
     log_message('[about] request')
     return render_template('about.html')
 
@@ -115,6 +125,7 @@ def create():
         content = request.form['content']
 
         if not title:
+            stderr_fileno.write('[create] return error because Title is empty')
             log_message('[create] return error because Title is empty')
             flash('Title is required!')
         else:
@@ -124,6 +135,7 @@ def create():
             connection.commit()
             connection.close()
 
+            stdout_fileno.write('[create] Article "{title}" created\n'.format(title = title))
             log_message('[create] Article "{title}" created'.format(title = title))
 
             return redirect(url_for('index'))
