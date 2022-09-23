@@ -34,4 +34,4 @@ And lastly, the first prototype of the application is storing and accessing post
   <figcaption>The schema for the "posts" table</figcaption>
 </figure>
 
-# Test
+
